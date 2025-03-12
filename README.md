@@ -14,6 +14,7 @@ The **Command Pattern** is a design pattern that encapsulates a request or actio
 In our **Library Management System**, we implemented the **Command Pattern** using:
 
 ### Base Command Class:
+```ruby
 class Command
   # Class method to create and execute a command
   def self.execute(*args)
@@ -38,6 +39,7 @@ end
 
 ### Example: Create Loan Action
 Each specific action is a separate command class. Example:
+```ruby
 module Loans
   class CreateCommand < Command
     def initialize(params)
@@ -58,6 +60,7 @@ end
 
 ### How It's Used?
 In controllers (**invokers**), we use commands like this:
+```ruby
 def create
   result = Loans::CreateCommand.execute(loan_params)
   if result[:success]
@@ -89,11 +92,13 @@ This pattern keeps controllers **thin** and business logic **organized** and **t
 ---
 
 ## How to Run the Project
-1. Ensure your **Ruby version** matches the one in the `.ruby-version` file (or install **Ruby 3.3.6** if needed) and your **Rails version** is 8.0.1.
+1. Ensure your **Ruby version** matches the one in the `.ruby-version` file (or install **Ruby 3.3.6** if needed).
 2. Run the following commands in your terminal:
+   ```sh
    bundle install
    rails db:migrate
    rails server
+   ```
 3. Open your browser to access the web application.
 
 ### User Credentials:
