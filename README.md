@@ -1,29 +1,32 @@
-# README
+# Command Pattern - Simple Guide
 
-Command Pattern - Simple Guide
+## What is the Command Pattern?
+The **Command Pattern** is a design pattern that encapsulates a request or action into a standalone object. This object contains all the information needed to perform the action.
 
-#What is the Command Pattern?
-The Command Pattern is a design pattern that converts a request or action into a standalone object. This object contains all the information needed to perform the action.
-Key Elements
-1.	Command: An object that encapsulates an action and its parameters
-2.	Invoker: Asks the command to carry out the request
-3.	Receiver: Knows how to perform the operations
+### Key Elements:
+1. **Command**: An object that encapsulates an action and its parameters.
+2. **Invoker**: Requests the command to carry out the action.
+3. **Receiver**: Knows how to perform the operations.
 
-#How We Implemented It
-In our library management system, we implemented the Command Pattern with:
-Base Command class
+---
+
+## How We Implemented It
+In our **Library Management System**, we implemented the **Command Pattern** using:
+
+### Base Command Class:
+```ruby
 class Command
-  Class method to create and execute a command
+  # Class method to create and execute a command
   def self.execute(*args)
     new(*args).execute
   end
 
-  Must be implemented by subclasses
+  # Must be implemented by subclasses
   def execute
     raise NotImplementedError
   end
 
-  Helper methods for consistent results
+  # Helper methods for consistent results
   def success(data = {})
     { success: true }.merge(data)
   end
@@ -32,9 +35,11 @@ class Command
     { success: false, errors: Array(errors) }
   end
 end
+```
 
-#Each specific action is a separate command class: 
-Example: create loan action 
+### Example: Create Loan Action
+Each specific action is a separate command class. Example:
+```ruby
 module Loans
   class CreateCommand < Command
     def initialize(params)
@@ -51,10 +56,11 @@ module Loans
     end
   end
 end
+```
 
-
-#How It's Used?
-In controllers (invokers), we use commands like this:
+### How It's Used?
+In controllers (**invokers**), we use commands like this:
+```ruby
 def create
   result = Loans::CreateCommand.execute(loan_params)
   if result[:success]
@@ -63,35 +69,46 @@ def create
     redirect_back alert: "Error: #{result[:errors].join(', ')}"
   end
 end
+```
 
-#Benefits
-1.	Separation of Concerns: Controllers handle HTTP, commands handle business logic
-2.	Single Responsibility: Each command does one thing well
-3.	Easy Testing: Test business logic without HTTP context
-4.	Reusability: Use commands from controllers, jobs, console, etc.
-5.	Extensibility: Add new commands without changing existing code
+---
 
-#Practical Applications
-•	Creating and processing loans
-•	Approving reservations
-•	Processing payments
-•	Searching resources
-•	User authentication
-This pattern keeps your controllers thin and your business logic organized and testable.
+## Benefits of Using the Command Pattern
+1. **Separation of Concerns**: Controllers handle HTTP logic, while commands handle business logic.
+2. **Single Responsibility Principle**: Each command is responsible for a single task.
+3. **Easy Testing**: Business logic can be tested independently from controllers.
+4. **Reusability**: Commands can be used in controllers, background jobs, or the console.
+5. **Extensibility**: New commands can be added without modifying existing code.
 
-#How to open the project:
-1. Change the ruby version at .ruby-version file (if you are not using version 3.3.6)
-2. Run commands in terminal : 
-   -bundle install
-   -rails db:migrate
-   -rails server
-3. Open browser to view the wen app created with command pattern
-4. Users: 
-   -Library user: admin@library.com/password123
-   -Library_personnel: arta.dervishi@example.com/password123
+### Practical Applications:
+- Creating and processing loans.
+- Approving reservations.
+- Processing payments.
+- Searching resources.
+- User authentication.
 
+This pattern keeps controllers **thin** and business logic **organized** and **testable**.
 
-#Worked by: 
-Katia Haveri
-Marsela Horeshka
-Kejsi Bushi
+---
+
+## How to Run the Project
+1. Ensure your **Ruby version** matches the one in the `.ruby-version` file (or install **Ruby 3.3.6** if needed).
+2. Run the following commands in your terminal:
+   ```sh
+   bundle install
+   rails db:migrate
+   rails server
+   ```
+3. Open your browser to access the web application.
+
+### User Credentials:
+- **Library User**: `admin@library.com / password123`
+- **Library Personnel**: `arta.dervishi@example.com / password123`
+
+---
+
+## Developed By:
+- **Katia Haveri**
+- **Marsela Horeshka**
+- **Kejsi Bushi**
+
