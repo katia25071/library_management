@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <div class="border rounded p-4 bg-light">
+    <h1 class="h3 border-bottom pb-2 mb-4"><%= @resource.title %></h1>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Type:</strong> <%= @resource.type %></p>
+        <p><strong>Category:</strong> <%= @resource.category %></p>
+        <p><strong>Language:</strong> <%= @resource.language %></p>
+        <p><strong>Published:</strong> <%= @resource.publish_year %></p>
+         <% if @resource.is_a?(Book) %>
+          <p><strong>Author:</strong> <%= @resource.author %></p>
+        <% else %>
+          <p><strong>Volume:</strong> <%= @resource.volume %></p>
+          <p><strong>Issue:</strong> <%= @resource.issue %></p>
+        <% end %>
+      </div>
+     
+    </div>
+
+    <% if @resource.description.present? %>
+      <div class="mt-3">
+        <h5 class="text-secondary">Description</h5>
+        <p><%= @resource.description %></p>
+      </div>
+    <% end %>
+
+    <div class="mt-3">
+      <% if @resource.available? %>
+        <span class="badge bg-success">Available</span>
+      <% else %>
+        <span class="badge bg-danger">Currently Unavailable</span>
+      <% end %>
+    </div>
+
+    <div class="mt-4 text-end">
+      <%= link_to 'Back to Resources', resources_path, class: 'btn btn-outline-secondary' %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+
+<div class="resources-section">
+  <div class="resources-header">
+    <h1>Library Resources</h1>
+    
+    <div class="search-section">
+      <%= form_tag resources_path, method: :get, class: 'search-form' do %>
+        <div class="search-inputs">
+          <%= text_field_tag :query, params[:query], placeholder: "Search by title, author, or publisher...", class: 'search-input' %>
+          <%= select_tag :type, options_for_select(['All', 'Book', 'Journal'], params[:type]),class: 'type-select' %>
+          <%= select_tag :category, options_for_select(Resource.distinct.pluck(:category), params[:category]), prompt: 'Select Category',
+                        class: 'category-select' %>
+          <%= submit_tag "Search", class: 'btn btn-primary me-2' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="resources-grid">
+    <% @resources.each do |resource| %>
+      <div class="resource-card">
+        <div class="resource-header">
+          <h3><%= resource.title %></h3>
+          <span class="resource-type"><%= resource.type %></span>
+        </div>
+        
+        <div class="resource-details">
+          <% if resource.is_a?(Book) %>
+            <p><strong>Author:</strong> <%= resource.author %></p>
+          <% else %>
+            <p><strong>Volume:</strong> <%= resource.volume %></p>
+            <p><strong>Issue:</strong> <%= resource.issue %></p>
+          <% end %>
+          <p><strong>Language:</strong> <%= resource.language %></p>
+          <p><strong>Published:</strong> <%= resource.publish_year %></p>
+          <p><strong>Category:</strong> <%= resource.category %></p>
+        </div>
+
+        <div class="resource-status">
+          <% if resource.available? %>
+            <span class="status available">Available</span>
+          <% else %>
+            <span class="status unavailable">Not Available</span>
+          <% end %>
+        </div>
+       <div class="d-flex justify-content-between mt-2">
+       <% if current_user.nil? || current_user.library_user? %>
+        <%= button_to 'Reserve', reservations_path(resource_id: resource.id), method: :post, class: 'btn btn-primary me-2' %>
+      <% end %>
+  <%= link_to 'View Details', resource_path(resource), class: 'btn btn-outline-secondary' %>
+</div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+
+<div class="form-container">
+  <h2>Create New Account</h2>
+
+  <%= form_with(model: @user, url: signup_path, local: true) do |f| %>
+    <% if @user.errors.any? %>
+      <div class="error-messages">
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'form-control', required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :surname %>
+      <%= f.text_field :surname, class: 'form-control', required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :email %>
+      <%= f.email_field :email, class: 'form-control', required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :contact_address %>
+      <%= f.text_field :contact_address, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password %>
+      <%= f.password_field :password, class: 'form-control', required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, class: 'form-control', required: true %>
+    </div>
+
+    <%= f.submit 'Sign Up', class: 'button button-primary' %>
+  <% end %>
+</div>

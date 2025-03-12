@@ -1,0 +1,61 @@
+<div class="min-h-screen d-flex flex-column justify-content-center py-5">
+  <div class="container-sm">
+    <h2 class="mt-6 text-center text-3xl font-weight-bold">
+      Edit Profile
+    </h2>
+  </div>
+
+  <div class="mt-4 container-sm">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <%= form_with(model: @user, local: true, class: "space-y-4") do |f| %>
+          <% if @user.errors.any? %>
+            <div class="alert alert-danger">
+              <h5 class="alert-heading">Please fix the following errors:</h5>
+              <ul class="mb-0">
+                <% @user.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+        
+          <div class="mb-4">
+            <%= f.label :name, class: "form-label" %>
+            <%= f.text_field :name, class: "form-control form-control-lg" %>
+          </div>
+
+    
+          <div class="mb-4">
+            <%= f.label :surname, class: "form-label" %>
+            <%= f.text_field :surname, class: "form-control form-control-lg" %>
+          </div>
+
+       
+          <div class="mb-4">
+            <%= f.label :email, class: "form-label" %>
+            <%= f.email_field :email, class: "form-control form-control-lg", disabled: true %>
+          </div>
+
+      
+          <div class="mb-4">
+            <%= f.label :contact_address, class: "form-label" %>
+            <%= f.text_field :contact_address, class: "form-control form-control-lg" %>
+          </div>
+
+    
+          <div class="mb-4">
+            <%= f.label :user, class: "form-label" %>
+            <%= f.text_field :user, value: @user.library_personnel? ? "Personnel" : "User", class: "form-control form-control-lg", disabled: true %>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <%= f.submit "Update Profile", class: "btn btn-primary btn-lg" %>
+            <%= link_to "Cancel", root_path, class: 'btn btn-outline-secondary btn-lg' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

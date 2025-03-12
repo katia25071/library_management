@@ -1,0 +1,22 @@
+# test/fixtures/loans.yml
+active:
+  user: library_user
+  resource: unavailable_book
+  loan_date: <%= 1.week.ago %>
+  due_date: <%= 1.week.from_now %>
+  active: true
+
+overdue:
+  user: library_user
+  resource: programming_journal
+  loan_date: <%= 3.weeks.ago %>
+  due_date: <%= 1.week.ago %>
+  active: true
+
+returned:
+  user: library_user
+  resource: available_book
+  loan_date: <%= 2.months.ago %>
+  due_date: <%= 6.weeks.ago %>
+  return_date: <%= 7.weeks.ago %>
+  active: false

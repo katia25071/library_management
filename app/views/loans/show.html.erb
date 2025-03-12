@@ -1,0 +1,74 @@
+
+<div class="container mx-auto px-4 py-8">
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        Loan Details
+      </h3>
+    </div>
+    <div class="border-t border-gray-200">
+      <dl>
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Resource</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @loan.resource.title %>
+          </dd>
+        </div>
+        
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">User</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @loan.user.full_name %>
+          </dd>
+        </div>
+
+        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Loan Date</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @loan.loan_date.strftime("%B %d, %Y") %>
+          </dd>
+        </div>
+
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Due Date</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @loan.due_date.strftime("%B %d, %Y") %>
+          </dd>
+        </div>
+
+        <% if @loan.fine.present? %>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Fine Amount</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <%= number_to_currency(@loan.fine.amount) %>
+            </dd>
+          </div>
+        <% end %>
+
+        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Status</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                      <%= @loan.active? ? (@loan.overdue? ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800') : 'bg-gray-100 text-gray-800' %>">
+              <%= @loan.active? ? (@loan.overdue? ? 'Overdue' : 'Active') : 'Returned' %>
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="mt-6 flex justify-end space-x-4">
+    <%= link_to 'Back to Loans', loans_path, class: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' %>
+    
+    <% if current_user.library_personnel? && @loan.active? %>
+      <%= button_to 'Return Loan', return_loan_path(@loan), method: :patch,
+          class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+      
+      <% if @loan.fine.present? %>
+        <%= button_to 'Close & Collect Fine', close_loan_path(@loan), method: :patch,
+            class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

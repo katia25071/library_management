@@ -1,0 +1,21 @@
+# test/fixtures/reservations.yml
+pending:
+  user: library_user
+  resource: unavailable_book
+  reservation_date: <%= Time.current %>
+  expiration_date: <%= 2.hours.from_now %>
+  status: pending
+
+approved:
+  user: library_user
+  resource: programming_journal
+  reservation_date: <%= 1.day.ago %>
+  expiration_date: <%= 22.hours.ago %>
+  status: approved
+
+rejected:
+  user: library_user
+  resource: available_book
+  reservation_date: <%= 2.days.ago %>
+  expiration_date: <%= 46.hours.ago %>
+  status: rejected

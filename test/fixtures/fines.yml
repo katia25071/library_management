@@ -1,0 +1,19 @@
+
+# test/fixtures/fines.yml
+unpaid:
+  loan: overdue
+  user: library_user
+  amount: 50.0
+  status: unpaid
+
+paid:
+  loan: returned
+  user: library_user
+  amount: 25.0
+  status: paid
+
+collected:
+  loan: returned
+  user: library_user
+  amount: 75.0
+  status: collected

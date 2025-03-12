@@ -1,0 +1,16 @@
+# test/fixtures/users.yml
+library_user:
+  name: John
+  surname: Doe
+  email: john.doe@example.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  user_type: library_user
+  contact_address: 123 Main St
+
+library_personnel:
+  name: Jane
+  surname: Admin
+  email: jane.admin@example.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
+  user_type: library_personnel
+  contact_address: 456 Admin Ave

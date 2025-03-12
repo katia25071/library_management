@@ -1,0 +1,104 @@
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">
+      <%= current_user == @user ? "My Loans" : "Loans for #{@user.full_name}" %>
+    </h1>
+  </div>
+
+  <div class="space-y-8">
+ 
+    <div>
+      <h2 class="text-xl font-semibold mb-4">Active Loans</h2>
+      <% if @active_loans.any? %>
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <% if current_user.library_personnel? %>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @active_loans.each do |loan| %>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <%= loan.resource.title %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <%= loan.due_date.strftime("%B %d, %Y") %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                              <%= loan.overdue? ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
+                      <%= loan.overdue? ? 'Overdue' : 'On Time' %>
+                    </span>
+                  </td>
+                  <% if current_user.library_personnel? %>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <%= button_to 'Return', return_loan_path(loan), method: :patch,
+                          class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm' %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-gray-500">No active loans</p>
+      <% end %>
+    </div>
+
+
+    <div>
+      <h2 class="text-xl font-semibold mb-4">Past Loans</h2>
+      <% if @past_loans.any? %>
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loan Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @past_loans.each do |loan| %>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <%= loan.resource.title %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <%= loan.loan_date.strftime("%B %d, %Y") %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <%= loan.return_date&.strftime("%B %d, %Y") || 'Not returned' %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <% if loan.fine.present? %>
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                        Fine: <%= number_to_currency(loan.fine.amount) %>
+                      </span>
+                    <% else %>
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Returned on time
+                      </span>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-gray-500">No past loans</p>
+      <% end %>
+    </div>
+  </div>
+</div>

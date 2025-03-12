@@ -1,0 +1,34 @@
+# test/fixtures/resources.yml
+available_book:
+  title: Programming Ruby
+  publish_year: 2019
+  language: English
+  publisher: O'Reilly
+  description: A comprehensive guide to Ruby programming
+  type: Book
+  author: Dave Thomas
+  category: Programming
+  available: true
+
+unavailable_book:
+  title: Ruby on Rails
+  publish_year: 2020
+  language: English
+  publisher: Pragmatic Bookshelf
+  description: Learn Ruby on Rails web development
+  type: Book
+  author: Sam Ruby
+  category: Programming
+  available: false
+
+programming_journal:
+  title: Journal of Programming
+  publish_year: 2023
+  language: English
+  publisher: ACM
+  description: Academic journal on programming
+  type: Journal
+  volume: 10
+  issue: 2
+  category: Academic
+  available: true

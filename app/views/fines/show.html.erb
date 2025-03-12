@@ -1,0 +1,102 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title mb-4">Fine Details</h3>
+      <dl class="row">
+        <!-- User -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">User</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd><%= @fine.user.full_name %></dd>
+        </div>
+        <!-- Resource -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Resource</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd><%= @fine.loan.resource.title %></dd>
+        </div>
+        <!-- Amount -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Amount</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd><%= number_to_currency(@fine.amount) %></dd>
+        </div>
+        <!-- Status -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Status</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd>
+            <span class="badge 
+              <%= @fine.unpaid? ? 'bg-danger' : 
+                  @fine.paid? ? 'bg-warning' : 
+                  'bg-success' %>">
+              <%= @fine.status.capitalize %>
+            </span>
+          </dd>
+        </div>
+        <!-- Loan Start Date -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Loan Start Date</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd><%= @fine.loan.loan_date.strftime("%B %d, %Y") %></dd>
+        </div>
+        <!-- Due Date -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Due Date</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd><%= @fine.loan.due_date.strftime("%B %d, %Y") %></dd>
+        </div>
+        <!-- Return Date -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Return Date</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd><%= @fine.loan.return_date&.strftime("%B %d, %Y") || 'Not returned yet' %></dd>
+        </div>
+        <!-- Days Overdue -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Days Overdue</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd>
+            <% days_overdue = (@fine.loan.return_date || Date.current).to_date - @fine.loan.due_date.to_date %>
+            <%= pluralize(days_overdue.to_i, 'day') %>
+          </dd>
+        </div>
+        <!-- Calculation -->
+        <div class="col-sm-3">
+          <dt class="font-weight-bold">Fine Calculation</dt>
+        </div>
+        <div class="col-sm-9">
+          <dd>
+            <% days_overdue = (@fine.loan.return_date || Date.current).to_date - @fine.loan.due_date.to_date %>
+            <% calculated_fine = days_overdue.to_i * 50.0 %>
+            <strong><%= days_overdue.to_i %> days</strong> × 50 Lek = <%= number_to_currency(calculated_fine) %>
+            <% if calculated_fine > 500.0 %>
+              <br><small class="text-muted">(Capped at maximum 500 Lek)</small>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  <!-- Action Buttons -->
+  <div class="mt-4 d-flex justify-content-end gap-3">
+    <%= link_to 'Back to Fines', fines_path, class: 'btn btn-secondary' %>
+    
+    <% if current_user.library_personnel? && @fine.status != 'collected' %>
+      <% if @fine.unpaid? %>
+        <%= button_to 'Mark as Paid', pay_fine_path(@fine), method: :patch,
+            class: 'btn btn-primary' %>
+      <% elsif @fine.paid? %>
+        <%= button_to 'Mark as Collected', collect_fine_path(@fine), method: :patch, class: 'btn btn-success' %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

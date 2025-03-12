@@ -1,0 +1,54 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Fines Management</h1>
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-striped table-bordered mb-0">
+        <thead class="table-light">
+          <tr>
+            <% if current_user.library_personnel? %>
+              <th scope="col">User</th>
+            <% end %>
+            <th scope="col">Resource</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @fines.each do |fine| %>
+            <tr>
+              <% if current_user.library_personnel? %>
+                <td><%= fine.user.full_name %></td>
+              <% end %>
+              <td><%= fine.loan.resource.title %></td>
+              <td><%= number_to_currency(fine.amount) %></td>
+              <td>
+                <span class="badge 
+                  <%= fine.unpaid? ? 'bg-danger' : 
+                      fine.paid? ? 'bg-warning text-dark' : 
+                      'bg-success' %>">
+                  <%= fine.status.capitalize %>
+                </span>
+              </td>
+              <td><%= fine.loan.due_date.strftime("%B %d, %Y") %></td>
+              <td>
+                <% if current_user.library_personnel? && fine.status != 'collected' %>
+                  <% if fine.unpaid? %>
+                    <%= button_to 'Mark Paid', pay_fine_path(fine), method: :patch, class: 'btn btn-sm btn-primary me-2' %>
+                  <% elsif fine.paid? %>
+                    <%= button_to 'Mark Collected', collect_fine_path(fine), method: :patch, class: 'btn btn-sm btn-success' %>
+                  <% end %>
+                <% end %>
+                <%= link_to 'Details', fine_path(fine), class: 'btn btn-sm btn-outline-secondary' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% if @fines.empty? %>
+    <div class="alert alert-secondary mt-4">No fines found.</div>
+  <% end %>
+</div>

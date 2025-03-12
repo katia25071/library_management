@@ -1,0 +1,57 @@
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">
+      <%= current_user == @user ? "My Fines" : "Fines for #{@user.full_name}" %>
+    </h1>
+  </div>
+
+  <% if @fines.any? %>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <% if current_user.library_personnel? %>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @fines.each do |fine| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <%= fine.loan.resource.title %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <%= number_to_currency(fine.amount) %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <%= fine.loan.due_date.strftime("%B %d, %Y") %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                          <%= fine.paid? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                  <%= fine.paid? ? 'Paid' : 'Unpaid' %>
+                </span>
+              </td>
+              <% if current_user.library_personnel? %>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <% unless fine.paid? %>
+                    <%= button_to 'Collect Payment', collect_fine_path(fine), method: :patch,
+                        class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-sm' %>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="text-gray-500">No fines found</p>
+  <% end %>
+</div>
