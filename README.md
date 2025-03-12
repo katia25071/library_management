@@ -92,7 +92,7 @@ This pattern keeps controllers **thin** and business logic **organized** and **t
 ---
 
 ## How to Run the Project
-1. Ensure your **Ruby version** matches the one in the `.ruby-version` file (or install **Ruby 3.3.6** if needed).
+1. Ensure your **Ruby version** matches the one in the `.ruby-version` file (or install **Ruby 3.3.6** if needed) and your **Rails version** is 8.0.1.
 2. Run the following commands in your terminal:
    ```sh
    bundle install
